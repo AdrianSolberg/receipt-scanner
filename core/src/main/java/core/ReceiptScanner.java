@@ -59,7 +59,7 @@ public class ReceiptScanner {
                 price = Double.parseDouble(priceStr);
             }
 
-            receipt.addItem(name, price);
+            receipt.addItem(new Item(name, price));
         }
 
         return receipt;

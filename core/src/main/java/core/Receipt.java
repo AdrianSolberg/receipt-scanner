@@ -3,16 +3,15 @@ package core;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
-import java.util.Map;
 
 /**
  * Class for representing a receipt
  */
-public class Receipt implements Iterable<Map.Entry<String, Double>> {
+public class Receipt implements Iterable<Item> {
     
-    private List<Map.Entry<String, Double>> receipt;
+    private List<Item> receipt;
 
-    public Receipt(List<Map.Entry<String, Double>> receipt) {
+    public Receipt(List<Item> receipt) {
         if (receipt == null) {
             throw new IllegalArgumentException("The list can not be null");
         }
@@ -23,11 +22,11 @@ public class Receipt implements Iterable<Map.Entry<String, Double>> {
         this(new ArrayList<>());
     }
 
-    public void addItem(String name, double price) {
-        if (name == null) {
+    public void addItem(Item item) {
+        if (item == null) {
             throw new IllegalArgumentException("The name can not be null");
         }
-        receipt.add(Map.entry(name, price));
+        receipt.add(item);
     }
 
     /**
@@ -36,11 +35,11 @@ public class Receipt implements Iterable<Map.Entry<String, Double>> {
      * @return Double with the total price of the receipt
      */
     public double getTotal() {
-        return receipt.stream().mapToDouble(i -> i.getValue()).sum();
+        return receipt.stream().mapToDouble(i -> i.getPrice()).sum();
     }
 
     @Override
-    public Iterator<Map.Entry<String, Double>> iterator() {
+    public Iterator<Item> iterator() {
         return receipt.iterator();
     }
 }
