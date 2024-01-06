@@ -1,29 +1,33 @@
 package core;
 
-import java.util.HashMap;
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
 import java.util.Map;
 
 /**
  * Class for representing a receipt
  */
-public class Receipt {
+public class Receipt implements Iterable<Map.Entry<String, Double>> {
     
-    private Map<String, Double> receipt;
+    private List<Map.Entry<String, Double>> receipt;
 
-    public Receipt(Map<String, Double> receipt) {
+    public Receipt(List<Map.Entry<String, Double>> receipt) {
+        if (receipt == null) {
+            throw new IllegalArgumentException("The list can not be null");
+        }
         this.receipt = receipt;
     }
 
     public Receipt() {
-        receipt = new HashMap<>();
+        this(new ArrayList<>());
     }
 
     public void addItem(String name, double price) {
-        receipt.put(name, price);
-    }
-
-    public void removeItem(String name) {
-        receipt.remove(name);
+        if (name == null) {
+            throw new IllegalArgumentException("The name can not be null");
+        }
+        receipt.add(Map.entry(name, price));
     }
 
     /**
@@ -32,6 +36,11 @@ public class Receipt {
      * @return Double with the total price of the receipt
      */
     public double getTotal() {
-        return receipt.values().stream().mapToDouble(v -> (double) v).sum();
+        return receipt.stream().mapToDouble(i -> i.getValue()).sum();
+    }
+
+    @Override
+    public Iterator<Map.Entry<String, Double>> iterator() {
+        return receipt.iterator();
     }
 }
