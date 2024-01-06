@@ -18,8 +18,11 @@ public class ReceiptScanner {
      * @return String with the text from the image
      * @throws TesseractException if there is an issue scanning the image
      */
-    private static String scanImage(String filename) throws TesseractException {
-        File imageFile = new File("core/src/main/resources/core/" + filename);
+    private static String scanImage(String filename) throws Exception {
+        if (filename == null) {
+            throw new IllegalArgumentException("Filename can not be null");
+        }
+        File imageFile = new File(ReceiptScanner.class.getResource(filename).toURI());
         ITesseract instance = new Tesseract();
         instance.setDatapath("tessdata");
         return instance.doOCR(imageFile);
@@ -33,7 +36,7 @@ public class ReceiptScanner {
      * @throws TesseractException if there is an issue scanning the receipt
      * @see ReceiptScanner#scanImage(String)
      */
-    public static Receipt scanReceipt(String filename) throws TesseractException {
+    public static Receipt scanReceipt(String filename) throws Exception {
         String receiptText = scanImage(filename);
         String[] lines = receiptText.split(System.lineSeparator());
 
@@ -45,7 +48,7 @@ public class ReceiptScanner {
 
             int i = 0;
             String name = splitLine[i];
-            while (!splitLine[i].matches("-?\\d+(\\.\\d+)?|-?\\d+(\\,\\d+)?") && i != splitLine.length) {
+            while (i != splitLine.length && !splitLine[i].matches("-?\\d+(\\.\\d+)?|-?\\d+(\\,\\d+)?")) {
                 name += " " + splitLine[i];
                 i++;
             }
@@ -60,5 +63,12 @@ public class ReceiptScanner {
         }
 
         return receipt;
+    }
+
+    public static void main(String args[]) throws Exception {
+        System.out.println(ReceiptScanner.scanImage("test.png"));
+        Receipt receipt = ReceiptScanner.scanReceipt("test.png");
+        System.out.println(receipt.getTotal());
+
     }
 }
