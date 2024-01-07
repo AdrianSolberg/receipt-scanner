@@ -64,11 +64,4 @@ public class ReceiptScanner {
 
         return receipt;
     }
-
-    public static void main(String args[]) throws Exception {
-        System.out.println(ReceiptScanner.scanImage("test.png"));
-        Receipt receipt = ReceiptScanner.scanReceipt("test.png");
-        System.out.println(receipt.getTotal());
-
-    }
 }
