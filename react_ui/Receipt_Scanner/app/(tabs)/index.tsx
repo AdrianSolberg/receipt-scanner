@@ -3,7 +3,7 @@ import { useEffect, useState } from 'react';
 
 import { Text, View } from '../../components/Themed';
 import { FlatList } from 'react-native-gesture-handler';
-import { Receipt, Item } from '../types';
+import { Receipt } from '../types';
 
 export default function TabOneScreen() {
   const [receipts, setReceipts] = useState<Receipt[]>([]);
@@ -14,36 +14,36 @@ export default function TabOneScreen() {
   }
 
   useEffect(() => {
-    fetchDataFromApi();
-  }, []);
+    const fetchDataFromApi = async () => {
+      try {
+        const response = await fetch('http://localhost:8080/receiptscanner');
+        const data: Receipt[] = await response.json();
+        setReceipts(data);
+      } catch (error) {
+        console.error('Error fetching data:', error);
+      }
+    };
 
-
-  const fetchDataFromApi = async () => {
-    try {
-      const response = await fetch('http://localhost:8080/receiptscanner');
-      const data: Receipt[] = await response.json();
-      setReceipts(data);
-      processReceipts();
-    } catch (error) {
-      console.error('Error fetching data:', error);
-    }
-  };
-
-  const processReceipts = () => {
-    const itemMap: HashMap<number> = {};
-    for (const receipt of receipts) {
-      for (const item of receipt.receipt) {
-        if (itemMap.hasOwnProperty(item.name)) {
-          itemMap[item.name] += item.price;
-        } else {
-          itemMap[item.name] = item.price;
+    const processReceipts = () => {
+      const itemMap: HashMap<number> = {};
+      for (const receipt of receipts) {
+        for (const item of receipt.receipt) {
+          if (itemMap.hasOwnProperty(item.name)) {
+            itemMap[item.name] += item.price;
+          } else {
+            itemMap[item.name] = item.price;
+          }
         }
       }
-    }
-    const itemArray = Object.entries(itemMap).map(([name, price]) => ({ name, price }));
-    itemArray.sort((a, b) => b.price - a.price);
-    setTopList(itemArray);
-  };
+      const itemArray = Object.entries(itemMap).map(([name, price]) => ({ name, price }));
+      itemArray.sort((a, b) => b.price - a.price);
+      setTopList(itemArray);
+    };
+
+
+    fetchDataFromApi();
+    processReceipts();
+  }, [receipts]);
 
   return (
     <View style={styles.container}>

@@ -5,6 +5,8 @@ interface Item {
   
 interface Receipt {
     receipt: Item[];
+    date: Date;
+    getTotal: () => number;
 }
 
 export { Item, Receipt };
