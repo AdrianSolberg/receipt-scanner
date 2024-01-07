@@ -1,10 +1,50 @@
 import { StyleSheet } from 'react-native';
+import { useEffect, useState } from 'react';
 
-import EditScreenInfo from '../../components/EditScreenInfo';
 import { Text, View } from '../../components/Themed';
 import { FlatList } from 'react-native-gesture-handler';
+import { Receipt, Item } from '../types';
 
 export default function TabOneScreen() {
+  const [receipts, setReceipts] = useState<Receipt[]>([]);
+  const [topList, setTopList] = useState<any[]>([]);
+
+  interface HashMap<Number> {
+    [key: string]: number;
+  }
+
+  useEffect(() => {
+    fetchDataFromApi();
+  }, []);
+
+
+  const fetchDataFromApi = async () => {
+    try {
+      const response = await fetch('http://localhost:8080/receiptscanner');
+      const data: Receipt[] = await response.json();
+      setReceipts(data);
+      processReceipts();
+    } catch (error) {
+      console.error('Error fetching data:', error);
+    }
+  };
+
+  const processReceipts = () => {
+    const itemMap: HashMap<number> = {};
+    for (const receipt of receipts) {
+      for (const item of receipt.receipt) {
+        if (itemMap.hasOwnProperty(item.name)) {
+          itemMap[item.name] += item.price;
+        } else {
+          itemMap[item.name] = item.price;
+        }
+      }
+    }
+    const itemArray = Object.entries(itemMap).map(([name, price]) => ({ name, price }));
+    itemArray.sort((a, b) => b.price - a.price);
+    setTopList(itemArray);
+  };
+
   return (
     <View style={styles.container}>
       <Text style={styles.title}>Most purchased items</Text>
@@ -15,15 +55,12 @@ export default function TabOneScreen() {
       </View>
       <FlatList 
         style={styles.list}
-        data={[
-          {key: '1. Fisketerninger', value: 200},
-          {key: '2. Kyllingfilet', value: 50}
-          ]} 
-          renderItem={({item}) => {
+        data={topList} 
+          renderItem={({item, index}) => {
             return (
             <View style={styles.listItem}>
-              <Text>{item.key}</Text>
-              <Text>{item.value},-</Text>
+              <Text>{index + 1}. {item.name}</Text>
+              <Text>{item.price},-</Text>
             </View>
             );
           }
