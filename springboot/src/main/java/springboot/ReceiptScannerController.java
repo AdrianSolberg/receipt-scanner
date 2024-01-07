@@ -12,6 +12,9 @@ import org.springframework.web.bind.annotation.RestController;
 import core.Receipt;
 import file.FileHandler;
 
+/**
+ * Class for dealing with HTTP requests to the server.
+ */
 @RestController
 @RequestMapping(ReceiptScannerController.RECEIPTSCANNER_MODEL_SERVICE_PATH)
 public class ReceiptScannerController {

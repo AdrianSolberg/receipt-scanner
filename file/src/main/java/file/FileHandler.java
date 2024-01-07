@@ -39,6 +39,7 @@ public class FileHandler {
         Reader reader = new FileReader(filePath.toFile(), Charset.forName("UTF-8"));
         Type receiptListType = new TypeToken<List<Receipt>>() {}.getType();
         List<Receipt> data = gson.fromJson(reader, receiptListType);
+        reader.close();
         if (data == null) {
             return new ArrayList<>();
         }
