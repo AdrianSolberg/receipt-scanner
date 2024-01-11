@@ -5,7 +5,7 @@ import { Camera, CameraType } from 'expo-camera';
 import * as MediaLibrary from 'expo-media-library';
 import { useEffect, useState, useRef } from 'react';
 import { FontAwesome } from '@expo/vector-icons';
-import { manipulateAsync, ActionCrop, SaveFormat } from 'expo-image-manipulator';
+import { ImageEditor } from "expo-image-crop-editor";
 
 export default function TabTwoScreen() {
   const [type, setType] = useState(CameraType.back);
@@ -33,10 +33,10 @@ export default function TabTwoScreen() {
     }
   }
 
-  const saveImage = async () => {
+  const saveImage = async (uri: string) => {
     if (image) {
       try {
-        await MediaLibrary.createAssetAsync(image.toString());
+        await MediaLibrary.createAssetAsync(uri);
         alert('Picture saved!');
         setImage(null);
       } catch (e) {
@@ -61,15 +61,21 @@ export default function TabTwoScreen() {
       </Camera>
       :
       <View style={styles.container}>
-        <Image source={{ uri: image.toString() }} style={StyleSheet.absoluteFill}/>
-        <View style={styles.buttonContainer}>
-          <TouchableOpacity style={styles.button} onPress={() => setImage(null)}>
-            <FontAwesome name="repeat" size={48} color="white" />
-          </TouchableOpacity>
-          <TouchableOpacity style={styles.button} onPress={saveImage}>
-            <FontAwesome name="check" size={48} color="white" />
-          </TouchableOpacity>
-        </View>
+        <ImageEditor
+          visible={true}
+          onCloseEditor={() => setImage(null)}
+          imageUri={image.toString()}
+          fixedCropAspectRatio={16 / 9}
+          lockAspectRatio={false}
+          minimumCropDimensions={{
+            width: 50,
+            height: 50,
+          }}
+          onEditingComplete={(result) => {
+            saveImage(result.uri);
+          }}
+          mode="full"
+        />
       </View>
       }
     </View>
