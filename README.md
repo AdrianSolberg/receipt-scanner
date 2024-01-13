@@ -1,6 +1,12 @@
 # Receipt Scanner
 
-This is an application for scanning receipts. By using your phone camera and cropping the image to only contain the items on the receipt, the app will scan the items and save them. Based on you saved receipt, you will get statistics over your shopping habits. Currently, this entails a list over your most purshased items. the app also provides a log over your scanned receipts, so you can go back and check how much you spent on a given day.
+This is an IOS application for scanning receipts. By using your phone camera and cropping the image to only contain the items on the receipt, the app will scan the items and save them. Based on you saved receipt, you will get statistics over your shopping habits. Currently, this entails a list over your most purshased items. the app also provides a log over your scanned receipts, so you can go back and check how much you spent on a given day.
+
+<div style="display: flex; justify-content: space-between;">
+  <img src="https://i.imgur.com/8d6ihw9.png" alt="Stats" width="30%" />
+  <img src="https://i.imgur.com/333rLoh.png" alt="Camera" width="30%" />
+  <img src="https://i.imgur.com/XEoOBk1.png" alt="Log" width="30%" />
+</div>
 
 ## Table of Contents
 
