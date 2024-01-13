@@ -1,0 +1,33 @@
+[
+  {
+    "receipt": [
+      {
+        "name": "Item1",
+        "price": 50.0
+      },
+      {
+        "name": "Item2",
+        "price": 100.0
+      }
+    ],
+    "date": "Jan 7, 2024, 3:46:30 PM"
+  },
+  {
+    "receipt": [
+      {
+        "name": "Item1",
+        "price": 50.0
+      }
+    ],
+    "date": "Jan 7, 2024, 3:46:30 PM"
+  },
+  {
+    "receipt": [
+      {
+        "name": "Item1",
+        "price": 50.0
+      }
+    ],
+    "date": "Jan 7, 2024, 5:07:55 PM"
+  }
+]
